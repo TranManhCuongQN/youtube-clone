@@ -1,8 +1,11 @@
 import 'babel-polyfill'
 import { Tooltip } from 'flowbite-react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+import { useOuterClick } from '../../hook/useOutsideClick'
 import Dropdown from '../Dropdown'
+import ModalAdvanced from '../Modal/ModalAdvanced'
+import { BsFillMicFill } from 'react-icons/bs'
 
 const keyword = [
   {
@@ -42,23 +45,26 @@ const keyword = [
 const SearchBar = () => {
   const [search, setSearch] = useState<string>('')
   const [isDropdown, setIsDropdown] = useState<boolean>(false)
-  const { transcript, listening, resetTranscript } = useSpeechRecognition()
+  const { transcript } = useSpeechRecognition()
+  const [isModal, setIsModal] = useState<boolean>(false)
+
+  const childRef = useRef<HTMLDivElement | null>(null)
   useEffect(() => {
     setSearch(transcript)
   }, [transcript])
 
+  useOuterClick(childRef.current, () => {
+    setIsDropdown(false)
+  })
+
   const handleVoice = () => {
-    if (listening) {
-      SpeechRecognition.stopListening()
-      resetTranscript()
-    } else {
-      SpeechRecognition.startListening()
-    }
+    SpeechRecognition.startListening({ language: 'vi-VN' })
+    setIsModal(true)
   }
 
   return (
     <>
-      <div className='flex items-center gap-x-5'>
+      <div className='flex items-center gap-x-5' ref={childRef}>
         <div className='w-[700px] border-[2px] border-[#303030] h-12 rounded-2xl bg-[#121212] px-4 relative'>
           <input
             type='text'
@@ -114,28 +120,29 @@ const SearchBar = () => {
             </div>
           </>
 
-          <Tooltip content='Tìm kiếm'>
-            <button
-              className='absolute top-0 right-0 bg-[#222222] w-[94px] h-full rounded-r-2xl cursor-pointer'
-              onClick={() => setIsDropdown(false)}
-            >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth='1.5'
-                stroke='white'
-                className=' h-7 text-center w-full'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z'
-                />
-              </svg>
-            </button>
-          </Tooltip>
+          <div className='absolute top-0 right-0 bg-[#222222] w-[94px] h-full rounded-r-2xl cursor-pointer flex items-center justify-center'>
+            {' '}
+            <Tooltip content='Tìm kiếm'>
+              <button onClick={() => setIsDropdown(false)}>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth='1.5'
+                  stroke='white'
+                  className=' h-6 text-center w-full'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z'
+                  />
+                </svg>
+              </button>
+            </Tooltip>
+          </div>
         </div>
+
         <Tooltip content='Tìm kiếm bằng giọng nói' animation='duration-1000'>
           <div className='w-12 h-12  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer'>
             <svg
@@ -155,6 +162,37 @@ const SearchBar = () => {
             </svg>
           </div>
         </Tooltip>
+        <ModalAdvanced
+          visible={isModal}
+          onClose={() => {
+            setIsModal(false)
+          }}
+          bodyClassName='w-[800px]  rounded-xl relative z-50 bg-[#212121] shadow-lg'
+        >
+          <div className='h-96 flex flex-col px-5 justify-between py-10 relative'>
+            <span
+              className='w-12 h-12  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer absolute top-2 right-2'
+              onClick={() => setIsModal(false)}
+            >
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                strokeWidth='1.5'
+                stroke='white'
+                className='w-8 h-8'
+              >
+                <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
+              </svg>
+            </span>
+
+            <span className='text-4xl text-white font-semibold'>Đang nghe ...</span>
+
+            <div className='w-16 h-16 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700'>
+              <BsFillMicFill className='w-6 h-6 text-white' />
+            </div>
+          </div>
+        </ModalAdvanced>
       </div>
     </>
   )

@@ -9,7 +9,7 @@ interface DropdownProps {
 }
 const Dropdown = (props: DropdownProps) => {
   const { className, data, search } = props
-  const ref = useRef()
+
   return (
     <div className={`absolute top-[52px] left-0 rounded-2xl z-50 shadow-xl ${className} `}>
       {data?.map((item, index) => (
