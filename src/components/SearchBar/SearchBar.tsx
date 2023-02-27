@@ -52,17 +52,21 @@ const SearchBar = () => {
       SpeechRecognition.stopListening()
       resetTranscript()
     } else {
-      SpeechRecognition.startListening()
+      SpeechRecognition.startListening({ language: 'vi' })
     }
   }
 
   return (
     <>
       <div className='flex items-center gap-x-5'>
-        <div className='w-[700px] border-[2px] border-[#303030] h-12 rounded-2xl bg-[#121212] px-4 relative'>
+        <div className='w-[700px] border-[#303030] h-12 rounded-2xl relative'>
           <input
             type='text'
-            className='w-[600px] rounded-l-2xl h-full bg-[#121212] px-16 placeholder:font-semibold placeholder:text-[#888888] placeholder:text-lg shadow-lg absolute left-0 top-0 text-white border-[#303030]'
+            className={
+              isDropdown
+                ? 'px-16 w-[605px] rounded-l-2xl h-full bg-[#121212] placeholder:font-semibold placeholder:text-[#888888] placeholder:text-lg shadow-lg absolute left-0 top-0 text-white border-[#303030]'
+                : 'ml-12 w-[557px] rounded-l-2xl h-full bg-[#121212] placeholder:font-semibold placeholder:text-[#888888] placeholder:text-lg shadow-lg absolute left-0 top-0 text-white border-[#303030]'
+            }
             placeholder={search ? '' : 'Tìm kiếm'}
             onChange={(e) => setSearch(e.target.value)}
             value={search}
@@ -89,52 +93,53 @@ const SearchBar = () => {
               </svg>
             </button>
             {isDropdown && (
-              <Dropdown
-                className='w-full h-[470px] bg-white text-black font-medium text-lg'
-                data={keyword}
-                search={true}
-              />
-            )}
-            <div className='absolute top-0 left-6 w-[20px] h-full flex items-center z-50'>
-              {' '}
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='bold'
-                viewBox='0 0 24 24'
-                strokeWidth='1.5'
-                stroke='white'
-                className=' h-7 text-center w-full font-extrabold'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z'
+              <>
+                <Dropdown
+                  className='w-full h-[470px] bg-white text-black font-medium text-lg'
+                  data={keyword}
+                  search={true}
                 />
-              </svg>
-            </div>
+                <div className='absolute top-0 left-6 w-[20px] h-full flex items-center z-50'>
+                  {' '}
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='bold'
+                    viewBox='0 0 24 24'
+                    strokeWidth='1.5'
+                    stroke='white'
+                    className=' h-7 text-center w-full font-extrabold'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z'
+                    />
+                  </svg>
+                </div>
+              </>
+            )}
           </>
 
-          <Tooltip content='Tìm kiếm'>
-            <button
-              className='absolute top-0 right-0 bg-[#222222] w-[94px] h-full rounded-r-2xl cursor-pointer'
-              onClick={() => setIsDropdown(false)}
-            >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth='1.5'
-                stroke='white'
-                className=' h-7 text-center w-full'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z'
-                />
-              </svg>
-            </button>
-          </Tooltip>
+          <div className='absolute top-0 right-0 border border-[#303030] bg-[#222222] w-[94px] h-full rounded-r-2xl cursor-pointer flex items-center justify-center'>
+            <Tooltip content='Tìm kiếm'>
+              <button className='mt-1' onClick={() => setIsDropdown(false)}>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth='1.5'
+                  stroke='white'
+                  className=' h-7 text-center w-full'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z'
+                  />
+                </svg>
+              </button>
+            </Tooltip>
+          </div>
         </div>
         <Tooltip content='Tìm kiếm bằng giọng nói' animation='duration-1000'>
           <div className='w-12 h-12  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer'>
