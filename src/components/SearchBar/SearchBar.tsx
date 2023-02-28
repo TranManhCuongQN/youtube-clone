@@ -65,7 +65,7 @@ const SearchBar = () => {
   return (
     <>
       <div className='flex items-center gap-x-5' ref={childRef}>
-        <div className='w-[700px] border-[#303030] h-12 rounded-2xl bg-[#121212] px-4 relative'>
+        <div className='w-[700px] border-[#303030] h-12 rounded-2xl px-4 relative'>
           <input
             type='text'
             className={
