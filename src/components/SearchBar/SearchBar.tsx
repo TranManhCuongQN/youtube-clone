@@ -48,12 +48,14 @@ const SearchBar = () => {
   const [isDropdown, setIsDropdown] = useState<boolean>(false)
   const { transcript, listening } = useSpeechRecognition()
   const [isModal, setIsModal] = useState<boolean>(false)
+  const [isProcess, setIsProcess] = useState<boolean>(false)
 
   const childRef = useRef<HTMLDivElement | null>(null)
 
   const handleVoice = () => {
-    SpeechRecognition.startListening({ language: 'vi-VN' })
     setIsModal(true)
+    setIsProcess(true)
+    SpeechRecognition.startListening({ language: 'vi-VN' })
   }
 
   useEffect(() => {
@@ -61,12 +63,14 @@ const SearchBar = () => {
   }, [transcript])
 
   useEffect(() => {
-    const out = setTimeout(() => SpeechRecognition.stopListening(), 3000)
-    if (listening === false && record !== '') {
+    const out = setTimeout(() => {
+      SpeechRecognition.stopListening()
+      setIsProcess(false)
+    }, 2000)
+    if (listening === false && record !== '' && isModal !== false) {
       setIsModal(false)
       setSearch(record)
     }
-
     return () => {
       clearTimeout(out)
     }
@@ -75,9 +79,6 @@ const SearchBar = () => {
   useOuterClick(childRef.current, () => {
     setIsDropdown(false)
   })
-
-  console.log(listening)
-
   return (
     <>
       <div className='flex items-center gap-x-5' ref={childRef}>
@@ -168,7 +169,10 @@ const SearchBar = () => {
         </div>
 
         <Tooltip content='Tìm kiếm bằng giọng nói' animation='duration-1000'>
-          <div className='w-12 h-12  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer'>
+          <div
+            className='w-12 h-12  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer'
+            onClick={handleVoice}
+          >
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -176,7 +180,6 @@ const SearchBar = () => {
               strokeWidth='1.5'
               stroke='white'
               className='w-6 h-6 '
-              onClick={handleVoice}
             >
               <path
                 strokeLinecap='round'
@@ -189,8 +192,8 @@ const SearchBar = () => {
         <ModalAdvanced
           visible={isModal}
           onClose={() => {
-            SpeechRecognition.abortListening()
             setIsModal(false)
+            SpeechRecognition.abortListening()
           }}
           bodyClassName='w-[800px]  rounded-xl relative z-50 bg-[#212121] shadow-lg'
         >
@@ -216,6 +219,13 @@ const SearchBar = () => {
 
             {transcript === '' ? (
               listening === true ? (
+                <>
+                  <span className='text-4xl text-white font-semibold'>Đang nghe ...</span>
+                  <div className='w-16 h-16 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700'>
+                    <BsFillMicFill className='w-6 h-6 text-white' />
+                  </div>
+                </>
+              ) : isProcess ? (
                 <>
                   <span className='text-4xl text-white font-semibold'>Đang nghe ...</span>
                   <div className='w-16 h-16 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700'>
