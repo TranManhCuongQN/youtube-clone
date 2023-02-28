@@ -2,11 +2,8 @@
 
 ### Thành viên trong nhóm:
 |Họ và tên|Mã số sinh viên|
-|-------|-------|
 |Trần Mạnh Cường|19110159|
-|-------|-------|
 |Nguyễn Văn Hoàng|19110209|
-|-------|-------|
 |Nguyễn Hồng Vũ Khánh|19151241|
 
 ### Lý do chọn đề tài:
