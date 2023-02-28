@@ -59,12 +59,14 @@ const SearchBar = () => {
   useEffect(() => {
     setRecord(transcript)
   }, [transcript])
+
   useEffect(() => {
-    const out = setTimeout(() => SpeechRecognition.stopListening(), 1500)
-    if (listening === false) {
+    const out = setTimeout(() => SpeechRecognition.stopListening(), 3000)
+    if (listening === false && record !== '') {
       setIsModal(false)
       setSearch(record)
     }
+
     return () => {
       clearTimeout(out)
     }
@@ -74,7 +76,8 @@ const SearchBar = () => {
     setIsDropdown(false)
   })
 
-  // console.log(listening, transcript)
+  console.log(listening)
+
   return (
     <>
       <div className='flex items-center gap-x-5' ref={childRef}>
@@ -210,17 +213,43 @@ const SearchBar = () => {
                 <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
               </svg>
             </span>
+
             {transcript === '' ? (
-              <span className='text-4xl text-white font-semibold'>Đang nghe ...</span>
+              listening === true ? (
+                <>
+                  <span className='text-4xl text-white font-semibold'>Đang nghe ...</span>
+                  <div className='w-16 h-16 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700'>
+                    <BsFillMicFill className='w-6 h-6 text-white' />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <span className='text-4xl text-white font-semibold'>Tôi chưa nghe rõ. Mời bạn nói lại</span>
+                  <div>
+                    <div
+                      className='w-20 h-20 rounded-full  flex items-center justify-center mx-auto bg-[#717171] cursor-pointer'
+                      onClick={() => SpeechRecognition.startListening({ language: 'vi-VN' })}
+                    >
+                      <BsFillMicFill className='w-8 h-8 text-white' />
+                    </div>
+                    <div className='text-lg font-semibold text-[#638caa] py-5 text-center'>
+                      Nhấn vào micrô để thử lại
+                    </div>
+                  </div>
+                </>
+              )
             ) : (
-              <span className='text-3xl text-white font-semibold'>{transcript}</span>
+              <>
+                {' '}
+                <span className='text-3xl text-white font-semibold'>{transcript}</span>
+                <div className='w-16 h-16 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700'>
+                  <BsFillMicFill className='w-6 h-6 text-white' />
+                </div>
+              </>
             )}
-            {/* <span className='text-4xl text-white font-semibold'>Đang nghe ...</span> */}
-            <div className='w-16 h-16 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700'>
-              <BsFillMicFill className='w-6 h-6 text-white' />
-            </div>
           </div>
         </ModalAdvanced>
+        <audio src='https://drive.google.com/file/d/1_P8G6JL06Dyen_1aEydAJximKswacleM/view?usp=share_link' />
       </div>
     </>
   )
