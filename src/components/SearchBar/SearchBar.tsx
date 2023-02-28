@@ -44,24 +44,37 @@ const keyword = [
 
 const SearchBar = () => {
   const [search, setSearch] = useState<string>('')
+  const [record, setRecord] = useState<string>('')
   const [isDropdown, setIsDropdown] = useState<boolean>(false)
-  const { transcript } = useSpeechRecognition()
+  const { transcript, listening } = useSpeechRecognition()
   const [isModal, setIsModal] = useState<boolean>(false)
 
   const childRef = useRef<HTMLDivElement | null>(null)
-  useEffect(() => {
-    setSearch(transcript)
-  }, [transcript])
-
-  useOuterClick(childRef.current, () => {
-    setIsDropdown(false)
-  })
 
   const handleVoice = () => {
     SpeechRecognition.startListening({ language: 'vi-VN' })
     setIsModal(true)
   }
 
+  useEffect(() => {
+    setRecord(transcript)
+  }, [transcript])
+  useEffect(() => {
+    const out = setTimeout(() => SpeechRecognition.stopListening(), 1500)
+    if (listening === false) {
+      setIsModal(false)
+      setSearch(record)
+    }
+    return () => {
+      clearTimeout(out)
+    }
+  }, [listening, record])
+
+  useOuterClick(childRef.current, () => {
+    setIsDropdown(false)
+  })
+
+  // console.log(listening, transcript)
   return (
     <>
       <div className='flex items-center gap-x-5' ref={childRef}>
@@ -83,7 +96,7 @@ const SearchBar = () => {
             {' '}
             <button
               className={`absolute top-0 right-28 w-[20px] h-full  transition-all ${
-                search ? 'opacity-1 overflow-visible' : 'opacity-0 overflow-hidden'
+                search ? 'opacity-100 overflow-visible' : 'opacity-0 overflow-hidden'
               }`}
               onClick={() => setSearch('')}
             >
@@ -93,7 +106,7 @@ const SearchBar = () => {
                 viewBox='0 0 24 24'
                 strokeWidth='1.5'
                 stroke='white'
-                className='w-6 h-6'
+                className='w-6 h-6 bg-[#121212] rounded-full hover:bg-[#a8a3a3]'
               >
                 <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
               </svg>
@@ -126,9 +139,12 @@ const SearchBar = () => {
             )}
           </>
 
-          <div className='absolute top-0 right-0 border border-[#303030] bg-[#222222] w-[94px] h-full rounded-r-2xl cursor-pointer flex items-center justify-center'>
+          <div
+            className='absolute top-0 right-0 border border-[#303030] bg-[#222222] w-[94px] h-full rounded-r-2xl cursor-pointer flex items-center justify-center'
+            onClick={() => setIsDropdown(false)}
+          >
             <Tooltip content='Tìm kiếm'>
-              <button className='mt-1' onClick={() => setIsDropdown(false)}>
+              <button className='mt-1'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -170,6 +186,7 @@ const SearchBar = () => {
         <ModalAdvanced
           visible={isModal}
           onClose={() => {
+            SpeechRecognition.abortListening()
             setIsModal(false)
           }}
           bodyClassName='w-[800px]  rounded-xl relative z-50 bg-[#212121] shadow-lg'
@@ -177,7 +194,10 @@ const SearchBar = () => {
           <div className='h-96 flex flex-col px-5 justify-between py-10 relative'>
             <span
               className='w-12 h-12  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer absolute top-2 right-2'
-              onClick={() => setIsModal(false)}
+              onClick={() => {
+                SpeechRecognition.abortListening()
+                setIsModal(false)
+              }}
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'
@@ -190,9 +210,12 @@ const SearchBar = () => {
                 <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
               </svg>
             </span>
-
-            <span className='text-4xl text-white font-semibold'>Đang nghe ...</span>
-
+            {transcript === '' ? (
+              <span className='text-4xl text-white font-semibold'>Đang nghe ...</span>
+            ) : (
+              <span className='text-3xl text-white font-semibold'>{transcript}</span>
+            )}
+            {/* <span className='text-4xl text-white font-semibold'>Đang nghe ...</span> */}
             <div className='w-16 h-16 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700'>
               <BsFillMicFill className='w-6 h-6 text-white' />
             </div>
