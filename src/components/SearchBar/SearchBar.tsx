@@ -48,13 +48,17 @@ const SearchBar = () => {
   const [isDropdown, setIsDropdown] = useState<boolean>(false)
   const { transcript, listening } = useSpeechRecognition()
   const [isModal, setIsModal] = useState<boolean>(false)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const audioStartRef = useRef<HTMLAudioElement | null>(null)
+  const audioEndRef = useRef<HTMLAudioElement | null>(null)
+  const audioCloseRef = useRef<HTMLAudioElement | null>(null)
+  const [isProcess, setIsProcess] = useState<boolean>(false)
   const childRef = useRef<HTMLDivElement | null>(null)
 
   const handleVoice = () => {
-    SpeechRecognition.startListening({ language: 'vi-VN' })
     setIsModal(true)
-    audioRef.current?.play()
+    audioStartRef.current?.play()
+    setIsProcess(true)
+    SpeechRecognition.startListening({ language: 'vi-VN' })
   }
 
   useEffect(() => {
@@ -62,13 +66,16 @@ const SearchBar = () => {
   }, [transcript])
 
   useEffect(() => {
-    const out = setTimeout(() => SpeechRecognition.stopListening(), 3000)
+    const out = setTimeout(() => {
+      if (record === '' && isModal && isProcess) audioEndRef.current?.play()
+      SpeechRecognition.stopListening()
+      setIsProcess(false)
+    }, 3000)
     if (listening === false && record !== '' && isModal !== false) {
       setIsModal(false)
       setSearch(record)
-      audioRef.current?.play()
+      audioEndRef.current?.play()
     }
-
     return () => {
       clearTimeout(out)
     }
@@ -77,7 +84,6 @@ const SearchBar = () => {
   useOuterClick(childRef.current, () => {
     setIsDropdown(false)
   })
-
   return (
     <>
       <div className='flex items-center gap-x-5'>
@@ -193,8 +199,9 @@ const SearchBar = () => {
         <ModalAdvanced
           visible={isModal}
           onClose={() => {
-            SpeechRecognition.abortListening()
             setIsModal(false)
+            audioCloseRef.current?.play()
+            SpeechRecognition.abortListening()
           }}
           bodyClassName='w-[800px]  rounded-xl relative z-50 bg-[#212121] shadow-lg'
         >
@@ -202,6 +209,7 @@ const SearchBar = () => {
             <span
               className='w-12 h-12  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer absolute top-2 right-2'
               onClick={() => {
+                audioCloseRef.current?.play()
                 SpeechRecognition.abortListening()
                 setIsModal(false)
               }}
@@ -226,13 +234,24 @@ const SearchBar = () => {
                     <BsFillMicFill className='w-6 h-6 text-white' />
                   </div>
                 </>
+              ) : isProcess ? (
+                <>
+                  <span className='text-4xl text-white font-semibold'>Đang nghe ...</span>
+                  <div className='w-16 h-16 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700'>
+                    <BsFillMicFill className='w-6 h-6 text-white' />
+                  </div>
+                </>
               ) : (
                 <>
                   <span className='text-4xl text-white font-semibold'>Tôi chưa nghe rõ. Mời bạn nói lại</span>
                   <div>
                     <div
                       className='w-20 h-20 rounded-full  flex items-center justify-center mx-auto bg-[#717171] cursor-pointer'
-                      onClick={() => SpeechRecognition.startListening({ language: 'vi-VN' })}
+                      onClick={() => {
+                        audioStartRef.current?.play()
+                        SpeechRecognition.startListening({ language: 'vi-VN' })
+                        setIsProcess(true)
+                      }}
                     >
                       <BsFillMicFill className='w-8 h-8 text-white' />
                     </div>
@@ -254,8 +273,18 @@ const SearchBar = () => {
           </div>
         </ModalAdvanced>
         <audio
-          src='https://res.cloudinary.com/dbekkzxtt/video/upload/v1677564641/tingting_sqvi6v.mp3?fbclid=IwAR3T6QhLIC6aciHf0B0YV2nhUjzoRo6iGux8ZEMv1q0tbG3ZVzXbyFzoCAc'
-          ref={audioRef}
+          src='https://res.cloudinary.com/dbekkzxtt/video/upload/v1677591082/error-2-126514_rmyns3.mp3?fbclid=IwAR285bwo7xl9O4swZqKSv4muZDT9ddRc33_EZ27TnonknzlEcCzYLoaiaPc'
+          ref={audioStartRef}
+          className='opacity-0 hidden'
+        />
+        <audio
+          src='https://res.cloudinary.com/dbekkzxtt/video/upload/v1677591082/error-2-126514_rmyns3.mp3?fbclid=IwAR285bwo7xl9O4swZqKSv4muZDT9ddRc33_EZ27TnonknzlEcCzYLoaiaPc'
+          ref={audioEndRef}
+          className='opacity-0 hidden'
+        />
+        <audio
+          src='https://res.cloudinary.com/dbekkzxtt/video/upload/v1677591082/error-2-126514_rmyns3.mp3?fbclid=IwAR285bwo7xl9O4swZqKSv4muZDT9ddRc33_EZ27TnonknzlEcCzYLoaiaPc'
+          ref={audioCloseRef}
           className='opacity-0 hidden'
         />
       </div>
