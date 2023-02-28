@@ -48,12 +48,13 @@ const SearchBar = () => {
   const [isDropdown, setIsDropdown] = useState<boolean>(false)
   const { transcript, listening } = useSpeechRecognition()
   const [isModal, setIsModal] = useState<boolean>(false)
-
+  const audioRef = useRef<HTMLAudioElement | null>(null)
   const childRef = useRef<HTMLDivElement | null>(null)
 
   const handleVoice = () => {
     SpeechRecognition.startListening({ language: 'vi-VN' })
     setIsModal(true)
+    audioRef.current?.play()
   }
 
   useEffect(() => {
@@ -62,9 +63,10 @@ const SearchBar = () => {
 
   useEffect(() => {
     const out = setTimeout(() => SpeechRecognition.stopListening(), 3000)
-    if (listening === false && record !== '') {
+    if (listening === false && record !== '' && isModal !== false) {
       setIsModal(false)
       setSearch(record)
+      audioRef.current?.play()
     }
 
     return () => {
@@ -76,12 +78,10 @@ const SearchBar = () => {
     setIsDropdown(false)
   })
 
-  console.log(listening)
-
   return (
     <>
-      <div className='flex items-center gap-x-5' ref={childRef}>
-        <div className='w-[700px] border-[#303030] h-12 rounded-2xl px-4 relative'>
+      <div className='flex items-center gap-x-5'>
+        <div className='w-[700px] border-[#303030] h-12 rounded-2xl px-4 relative' ref={childRef}>
           <input
             type='text'
             className={
@@ -119,7 +119,7 @@ const SearchBar = () => {
                 <Dropdown
                   className='w-full h-[470px] bg-white text-black font-medium text-lg'
                   data={keyword}
-                  search={true}
+                  search={isDropdown}
                 />
                 <div className='absolute top-0 left-6 w-[20px] h-full flex items-center z-50'>
                   {' '}
@@ -168,7 +168,10 @@ const SearchBar = () => {
         </div>
 
         <Tooltip content='Tìm kiếm bằng giọng nói' animation='duration-1000'>
-          <div className='w-12 h-12  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer'>
+          <div
+            className='w-12 h-12  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer'
+            onClick={handleVoice}
+          >
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -176,7 +179,6 @@ const SearchBar = () => {
               strokeWidth='1.5'
               stroke='white'
               className='w-6 h-6 '
-              onClick={handleVoice}
             >
               <path
                 strokeLinecap='round'
@@ -186,6 +188,8 @@ const SearchBar = () => {
             </svg>
           </div>
         </Tooltip>
+
+        {/* //*Modal */}
         <ModalAdvanced
           visible={isModal}
           onClose={() => {
@@ -249,7 +253,11 @@ const SearchBar = () => {
             )}
           </div>
         </ModalAdvanced>
-        <audio src='https://drive.google.com/file/d/1_P8G6JL06Dyen_1aEydAJximKswacleM/view?usp=share_link' />
+        <audio
+          src='https://res.cloudinary.com/dbekkzxtt/video/upload/v1677564641/tingting_sqvi6v.mp3?fbclid=IwAR3T6QhLIC6aciHf0B0YV2nhUjzoRo6iGux8ZEMv1q0tbG3ZVzXbyFzoCAc'
+          ref={audioRef}
+          className='opacity-0 hidden'
+        />
       </div>
     </>
   )

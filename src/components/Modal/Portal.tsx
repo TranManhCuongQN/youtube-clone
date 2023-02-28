@@ -32,6 +32,7 @@ const Portal = ({
   useEffect(() => {
     document.body.appendChild(portalWrapperElm)
   }, [])
+
   const renderContent = (
     <div className={containerClassName} style={containerStyle}>
       {overlay && <div className='absolute inset-0 bg-black overplay bg-opacity-20' onClick={onClose}></div>}
