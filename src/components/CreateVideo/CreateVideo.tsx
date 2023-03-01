@@ -15,7 +15,7 @@ const data = [
   {
     id: 2,
     name: 'Phát trực tiếp',
-    path: '/live',
+    path: '/livestream',
     icon: <RiWirelessChargingFill className=' w-10 h-8 text-white' />
   }
 ]
@@ -41,7 +41,9 @@ const CreateVideo = () => {
           ) : (
             <RiVideoAddLine className='w-10 h-8 text-white pointer-events-none' />
           )}
-          {isShow && <Dropdown className='w-[220px] h-[118px] bg-red-400 text-white' data={data} createVideo={true} />}
+          {isShow && (
+            <Dropdown className='w-[220px] h-[118px] bg-[#282828] text-white left-0' data={data} createVideo={true} />
+          )}
         </div>
       </Tooltip>
     </>

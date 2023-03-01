@@ -123,7 +123,7 @@ const SearchBar = () => {
             {isDropdown && (
               <>
                 <Dropdown
-                  className='w-full h-[470px] bg-white text-black font-medium text-lg'
+                  className='left-0 w-full h-[470px] bg-white text-black font-medium text-lg'
                   data={keyword}
                   search={isDropdown}
                 />
@@ -280,7 +280,7 @@ const SearchBar = () => {
         <audio
           src='https://res.cloudinary.com/dbekkzxtt/video/upload/v1677591082/error-2-126514_rmyns3.mp3?fbclid=IwAR285bwo7xl9O4swZqKSv4muZDT9ddRc33_EZ27TnonknzlEcCzYLoaiaPc'
           ref={audioEndRef}
-          className='opacity-0 hidden'
+          className='opacity-0 hidden '
         />
         <audio
           src='https://res.cloudinary.com/dbekkzxtt/video/upload/v1677591082/error-2-126514_rmyns3.mp3?fbclid=IwAR285bwo7xl9O4swZqKSv4muZDT9ddRc33_EZ27TnonknzlEcCzYLoaiaPc'
