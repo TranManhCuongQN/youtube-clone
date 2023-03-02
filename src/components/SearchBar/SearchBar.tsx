@@ -6,8 +6,10 @@ import { useOuterClick } from '../../hook/useOutsideClick'
 import Dropdown from '../Dropdown'
 import ModalAdvanced from '../Modal/ModalAdvanced'
 import { BsFillMicFill } from 'react-icons/bs'
+import { Link } from 'react-router-dom'
+import { RiHistoryLine } from 'react-icons/ri'
 
-const keyword = [
+const keyword: { id: number; name: string }[] = [
   {
     id: 1,
     name: 'Em gái mưa'
@@ -43,9 +45,10 @@ const keyword = [
 ]
 
 interface propType {
-  handleSwitchMobie?: () => void
+  handleSwitchMobie: () => void
   searchMobie?: boolean
 }
+
 const SearchBar = (props: propType) => {
   const { searchMobie, handleSwitchMobie } = props
   const [search, setSearch] = useState<string>('')
@@ -94,13 +97,11 @@ const SearchBar = (props: propType) => {
     <>
       {searchMobie && (
         <>
-          <div className='flex items-center justify-between h-15 bg-[#0f0f0f] sticky z-50 max-w-full px-2 py-2'>
+          <div className='flex items-center justify-between h-15 bg-[#0f0f0f] sticky z-50 max-w-full px-2 py-2 gap-x-2'>
             <div
               className='w-8 h-8  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer'
               onClick={() => {
-                if (handleSwitchMobie) {
-                  handleSwitchMobie()
-                }
+                handleSwitchMobie()
               }}
             >
               <svg
@@ -115,70 +116,78 @@ const SearchBar = (props: propType) => {
               </svg>
             </div>
 
-            <div
-              className='w-full border-[#303030] h-8 rounded-2xl relative flex items-center flex-shrink'
-              ref={childRef}
-            >
-              <input
-                type='text'
-                className={`w-[299px] rounded-l-2xl h-full bg-[#121212] placeholder:font-semibold placeholder:text-[#888888] placeholder:text-xs shadow-lg absolute left-0 top-0 text-white border-[#303030] text-xs ${
-                  isDropdown ? 'pl-8' : ''
-                }`}
-                placeholder={search ? '' : 'Tìm kiếm'}
-                onChange={(e) => setSearch(e.target.value)}
-                value={search}
-                onClick={() => setIsDropdown(true)}
-              />
-
-              <>
-                {' '}
-                <button
-                  className={`absolute top-0 right-12 w-[20px] h-full  transition-all ${
-                    search ? 'opacity-100 overflow-visible' : 'opacity-0 overflow-hidden'
+            <div className=' h-8 flex items-center w-[300px]' ref={childRef}>
+              <div className='relative w-full'>
+                <input
+                  type='text'
+                  className={` rounded-l-2xl h-8 bg-[#121212] placeholder:font-semibold placeholder:text-[#888888] placeholder:text-xs shadow-lg  text-white border-[#303030] border-1  w-full py-2 ${
+                    search ? '' : 'pl-8'
                   }`}
-                  onClick={() => setSearch('')}
-                >
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    strokeWidth='1.5'
-                    stroke='white'
-                    className='w-4 h-4 bg-[#121212] rounded-full hover:bg-[#a8a3a3]'
+                  placeholder={search ? '' : 'Tìm kiếm'}
+                  onChange={(e) => setSearch(e.target.value)}
+                  value={search}
+                  onClick={() => setIsDropdown(true)}
+                />
+
+                <>
+                  {' '}
+                  <button
+                    className={`absolute top-0 right-0 w-[20px] h-full  transition-all ${
+                      search ? 'opacity-100 overflow-visible' : 'opacity-0 overflow-hidden'
+                    }`}
+                    onClick={() => setSearch('')}
                   >
-                    <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
-                  </svg>
-                </button>
-                {isDropdown && (
-                  <>
-                    <Dropdown
-                      className='left-0 w-full h-[470px] bg-white text-black font-medium text-lg'
-                      data={keyword}
-                      search={isDropdown}
-                    />
-                    <div className='absolute top-0 left-2 w-[20px] h-full flex items-center z-50 '>
-                      {' '}
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        fill='bold'
-                        viewBox='0 0 24 24'
-                        strokeWidth='1.5'
-                        stroke='white'
-                        className='h-4  w-4'
-                      >
-                        <path
-                          strokeLinecap='round'
-                          strokeLinejoin='round'
-                          d='M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z'
-                        />
-                      </svg>
-                    </div>
-                  </>
-                )}
-              </>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      strokeWidth='1.5'
+                      stroke='white'
+                      className='w-4 h-4 bg-[#121212] rounded-full hover:bg-[#a8a3a3]'
+                    >
+                      <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
+                    </svg>
+                  </button>
+                  {isDropdown && (
+                    <>
+                      <Dropdown className='left-0 w-full h-[360px] bg-white text-black font-medium text-lg'>
+                        {keyword.map((item, index) => (
+                          <Link to='/' key={item.id} className='flex flex-col px-2 py-2 my-2 hover:bg-gray-100'>
+                            <div className='flex items-center justify-between'>
+                              <div className='flex items-end gap-x-3'>
+                                <RiHistoryLine className='w-5 h-5' />
+                                <span className='text-xs font-medium'>{item.name}</span>
+                              </div>
+                              <span className='text-blue-700 text-xs hover:underline'>Xoá</span>
+                            </div>
+                          </Link>
+                        ))}
+                      </Dropdown>
+
+                      <div className='absolute top-0 left-0 px-2 h-full flex items-center z-50 '>
+                        {' '}
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          fill='bold'
+                          viewBox='0 0 24 24'
+                          strokeWidth='1.5'
+                          stroke='white'
+                          className='h-4  w-4'
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            d='M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z'
+                          />
+                        </svg>
+                      </div>
+                    </>
+                  )}
+                </>
+              </div>
 
               <div
-                className='absolute top-0 right-0 border border-[#303030] bg-[#222222] w-[40px] h-full rounded-r-2xl cursor-pointer flex items-center justify-center  '
+                className=' border border-[#303030] bg-[#222222] w-[40px] h-full rounded-r-2xl cursor-pointer flex items-center justify-center  '
                 onClick={() => setIsDropdown(false)}
               >
                 <Tooltip content='Tìm kiếm'>
@@ -202,7 +211,7 @@ const SearchBar = (props: propType) => {
               </div>
             </div>
 
-            <Tooltip content='Tìm kiếm bằng giọng nói' animation='duration-1000'>
+            <Tooltip content='Tìm kiếm bằng giọng nói' animation='duration-1000' className='text-sm'>
               <div
                 className='w-8 h-8  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer'
                 onClick={handleVoice}
@@ -232,11 +241,11 @@ const SearchBar = (props: propType) => {
                 audioCloseRef.current?.play()
                 SpeechRecognition.abortListening()
               }}
-              bodyClassName='w-[800px]  rounded-xl relative z-50 bg-[#212121] shadow-lg'
+              bodyClassName='rounded-xl relative z-50 bg-[#212121] shadow-lg w-full mx-4'
             >
-              <div className='h-96 flex flex-col px-5 justify-between py-10 relative'>
+              <div className='h-70 flex flex-col px-3 justify-between py-3 relative w-full '>
                 <span
-                  className='w-12 h-12  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer absolute top-2 right-2'
+                  className='w-8 h-8  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer absolute top-2 right-2'
                   onClick={() => {
                     audioCloseRef.current?.play()
                     SpeechRecognition.abortListening()
@@ -249,7 +258,7 @@ const SearchBar = (props: propType) => {
                     viewBox='0 0 24 24'
                     strokeWidth='1.5'
                     stroke='white'
-                    className='w-8 h-8'
+                    className='w-5 h-5'
                   >
                     <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
                   </svg>
@@ -258,33 +267,33 @@ const SearchBar = (props: propType) => {
                 {transcript === '' ? (
                   listening === true ? (
                     <>
-                      <span className='text-4xl text-white font-semibold'>Đang nghe ...</span>
-                      <div className='w-16 h-16 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700'>
-                        <BsFillMicFill className='w-6 h-6 text-white' />
+                      <span className='text-base text-white font-semibold'>Đang nghe ...</span>
+                      <div className='w-8 h-8 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700 my-5'>
+                        <BsFillMicFill className='w-5 h-5 text-white' />
                       </div>
                     </>
                   ) : isProcess ? (
                     <>
-                      <span className='text-4xl text-white font-semibold'>Đang nghe ...</span>
-                      <div className='w-16 h-16 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700'>
-                        <BsFillMicFill className='w-6 h-6 text-white' />
+                      <span className='text-base text-white font-semibold'>Đang nghe ...</span>
+                      <div className='w-8 h-8 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700 my-5'>
+                        <BsFillMicFill className='w-5 h-5 text-white' />
                       </div>
                     </>
                   ) : (
                     <>
-                      <span className='text-4xl text-white font-semibold'>Tôi chưa nghe rõ. Mời bạn nói lại</span>
+                      <span className='text-base text-white font-semibold mb-8'>Tôi chưa nghe rõ. Mời bạn nói lại</span>
                       <div>
                         <div
-                          className='w-20 h-20 rounded-full  flex items-center justify-center mx-auto bg-[#717171] cursor-pointer'
+                          className='w-10 h-10 rounded-full flex items-center justify-center mx-auto bg-[#717171] cursor-pointer'
                           onClick={() => {
                             audioStartRef.current?.play()
                             SpeechRecognition.startListening({ language: 'vi-VN' })
                             setIsProcess(true)
                           }}
                         >
-                          <BsFillMicFill className='w-8 h-8 text-white' />
+                          <BsFillMicFill className='w-5 h-5 text-white' />
                         </div>
-                        <div className='text-lg font-semibold text-[#638caa] py-5 text-center'>
+                        <div className='text-sm font-semibold text-[#638caa] py-2 text-center'>
                           Nhấn vào micrô để thử lại
                         </div>
                       </div>
@@ -293,9 +302,9 @@ const SearchBar = (props: propType) => {
                 ) : (
                   <>
                     {' '}
-                    <span className='text-3xl text-white font-semibold'>{transcript}</span>
-                    <div className='w-16 h-16 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700'>
-                      <BsFillMicFill className='w-6 h-6 text-white' />
+                    <span className='text-base text-white font-semibold'>{transcript}</span>
+                    <div className='w-8 h-8 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700 my-5'>
+                      <BsFillMicFill className='w-5 h-5 text-white' />
                     </div>
                   </>
                 )}
@@ -348,6 +357,7 @@ const SearchBar = (props: propType) => {
               </svg>
             </button>
           </Tooltip>
+
           <Tooltip content='Tìm kiếm bằng giọng nói' animation='duration-1000'>
             <div
               className='w-8 h-8  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer'
@@ -369,6 +379,98 @@ const SearchBar = (props: propType) => {
               </svg>
             </div>
           </Tooltip>
+
+          <ModalAdvanced
+            visible={isModal}
+            onClose={() => {
+              setIsModal(false)
+              audioCloseRef.current?.play()
+              SpeechRecognition.abortListening()
+            }}
+            bodyClassName='rounded-xl relative z-50 bg-[#212121] shadow-lg w-full mx-4'
+          >
+            <div className='h-70 flex flex-col px-3 justify-between py-3 relative w-full '>
+              <span
+                className='w-8 h-8  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer absolute top-2 right-2'
+                onClick={() => {
+                  audioCloseRef.current?.play()
+                  SpeechRecognition.abortListening()
+                  setIsModal(false)
+                }}
+              >
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth='1.5'
+                  stroke='white'
+                  className='w-5 h-5'
+                >
+                  <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
+                </svg>
+              </span>
+
+              {transcript === '' ? (
+                listening === true ? (
+                  <>
+                    <span className='text-base text-white font-semibold'>Đang nghe ...</span>
+                    <div className='w-8 h-8 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700 my-5'>
+                      <BsFillMicFill className='w-5 h-5 text-white' />
+                    </div>
+                  </>
+                ) : isProcess ? (
+                  <>
+                    <span className='text-base text-white font-semibold'>Đang nghe ...</span>
+                    <div className='w-8 h-8 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700 my-5'>
+                      <BsFillMicFill className='w-5 h-5 text-white' />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <span className='text-base text-white font-semibold mb-8'>Tôi chưa nghe rõ. Mời bạn nói lại</span>
+                    <div>
+                      <div
+                        className='w-10 h-10 rounded-full flex items-center justify-center mx-auto bg-[#717171] cursor-pointer'
+                        onClick={() => {
+                          audioStartRef.current?.play()
+                          SpeechRecognition.startListening({ language: 'vi-VN' })
+                          setIsProcess(true)
+                        }}
+                      >
+                        <BsFillMicFill className='w-5 h-5 text-white' />
+                      </div>
+                      <div className='text-sm font-semibold text-[#638caa] py-2 text-center'>
+                        Nhấn vào micrô để thử lại
+                      </div>
+                    </div>
+                  </>
+                )
+              ) : (
+                <>
+                  {' '}
+                  <span className='text-base text-white font-semibold'>{transcript}</span>
+                  <div className='w-8 h-8 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700 my-5'>
+                    <BsFillMicFill className='w-5 h-5 text-white' />
+                  </div>
+                </>
+              )}
+            </div>
+          </ModalAdvanced>
+          <audio
+            src='https://res.cloudinary.com/dbekkzxtt/video/upload/v1677591082/error-2-126514_rmyns3.mp3?fbclid=IwAR285bwo7xl9O4swZqKSv4muZDT9ddRc33_EZ27TnonknzlEcCzYLoaiaPc'
+            ref={audioStartRef}
+            className='opacity-0 hidden'
+          />
+          <audio
+            src='https://res.cloudinary.com/dbekkzxtt/video/upload/v1677591082/error-2-126514_rmyns3.mp3?fbclid=IwAR285bwo7xl9O4swZqKSv4muZDT9ddRc33_EZ27TnonknzlEcCzYLoaiaPc'
+            ref={audioEndRef}
+            className='opacity-0 hidden '
+          />
+          <audio
+            src='https://res.cloudinary.com/dbekkzxtt/video/upload/v1677591082/error-2-126514_rmyns3.mp3?fbclid=IwAR285bwo7xl9O4swZqKSv4muZDT9ddRc33_EZ27TnonknzlEcCzYLoaiaPc'
+            ref={audioCloseRef}
+            className='opacity-0 hidden'
+          />
         </div>
       )}
     </>

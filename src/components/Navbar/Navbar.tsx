@@ -34,9 +34,9 @@ const Navbar = () => {
             </div>
 
             <Tooltip content='Trang chủ YouTube' animation='duration-1000'>
-              <Link to='/' className='flex items-center cursor-pointer'>
-                <BsYoutube className='text-red-600 w-5 h-5' />
-                <span className='text-xs text-white font-medium pb-1'>YouTube</span>
+              <Link to='/' className='flex items-center cursor-pointer gap-x-1'>
+                <BsYoutube className='text-red-600 w-6 h-6' />
+                <span className='text-base text-white font-medium '>YouTube</span>
               </Link>
             </Tooltip>
           </div>
