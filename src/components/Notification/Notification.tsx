@@ -15,14 +15,14 @@ const Notification = () => {
   return (
     <Tooltip content='Thông báo' animation='duration-1000'>
       <div
-        className='w-12 h-12  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer relative'
+        className='w-8 h-8  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer relative '
         onClick={() => setIsShow(!isShow)}
         ref={childRef}
       >
         {isShow ? (
-          <AiFillBell className='w-8 h-8 text-white pointer-events-none' />
+          <AiFillBell className='w-5 h-5 text-white pointer-events-none ' />
         ) : (
-          <AiOutlineBell className='w-8 h-8 text-white pointer-events-none' />
+          <AiOutlineBell className='w-5 h-5 text-white pointer-events-none ' />
         )}
         {isShow && (
           <>

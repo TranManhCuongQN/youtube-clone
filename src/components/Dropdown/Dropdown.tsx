@@ -19,9 +19,9 @@ const Dropdown = (props: DropdownProps) => {
         {data?.map((item, index) => (
           <div key={item.id}>
             {search && (
-              <Link to='/' key={item.id} className='flex flex-col px-5 py-2 mt-3 hover:bg-gray-100'>
+              <Link to='/' key={item.id} className='flex flex-col px-3 py-2 mt-3 hover:bg-gray-100'>
                 <div className='flex items-center justify-between'>
-                  <div className='flex items-end gap-x-5'>
+                  <div className='flex items-end gap-x-3'>
                     <RiHistoryLine className='w-7 h-7' />
                     <span className='text-lg font-medium'>{item.name}</span>
                   </div>
