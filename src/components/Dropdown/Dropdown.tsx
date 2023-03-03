@@ -9,13 +9,7 @@ const Dropdown = (props: DropdownProps) => {
 
   return (
     <div className={`absolute top-[35px]  rounded-xl z-50 shadow-xl ${className} `}>
-      <>
-        {children}
-        {/* {notification && (
-         
-          </div>
-        )} */}
-      </>
+      <>{children}</>
     </div>
   )
 }

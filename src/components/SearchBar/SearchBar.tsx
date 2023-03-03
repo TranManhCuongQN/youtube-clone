@@ -121,7 +121,7 @@ const SearchBar = (props: propType) => {
                 <input
                   type='text'
                   className={` rounded-l-2xl h-8 bg-[#121212] placeholder:font-semibold placeholder:text-[#888888] placeholder:text-xs shadow-lg  text-white border-[#303030] border-1  w-full py-2 ${
-                    search ? '' : 'pl-8'
+                    search ? '' : 'pl-10'
                   }`}
                   placeholder={search ? '' : 'Tìm kiếm'}
                   onChange={(e) => setSearch(e.target.value)}
@@ -164,7 +164,7 @@ const SearchBar = (props: propType) => {
                         ))}
                       </Dropdown>
 
-                      <div className='absolute top-0 left-0 px-2 h-full flex items-center z-50 '>
+                      <div className='absolute top-0 left-0 pl-3 h-full flex items-center z-50 '>
                         {' '}
                         <svg
                           xmlns='http://www.w3.org/2000/svg'
