@@ -93,6 +93,7 @@ const SearchBar = (props: propType) => {
     setIsDropdown(false)
   })
 
+  console.log('searchMobie', searchMobie, isDropdown)
   return (
     <>
       {searchMobie && (
@@ -150,7 +151,7 @@ const SearchBar = (props: propType) => {
                   </button>
                   {isDropdown && (
                     <>
-                      <Dropdown className='left-0 w-full h-[360px] bg-white text-black font-medium text-lg'>
+                      <Dropdown className='left-0 w-full h-[360px] bg-white text-black font-medium text-lg '>
                         {keyword.map((item, index) => (
                           <Link to='/' key={item.id} className='flex flex-col px-2 py-2 my-2 hover:bg-gray-100'>
                             <div className='flex items-center justify-between'>
@@ -241,7 +242,7 @@ const SearchBar = (props: propType) => {
                 audioCloseRef.current?.play()
                 SpeechRecognition.abortListening()
               }}
-              bodyClassName='rounded-xl relative z-50 bg-[#212121] shadow-lg w-full mx-4'
+              bodyClassName='rounded-xl relative z-50 bg-[#212121] shadow-lg w-full mx-4  '
             >
               <div className='h-70 flex flex-col px-3 justify-between py-3 relative w-full '>
                 <span
@@ -387,9 +388,9 @@ const SearchBar = (props: propType) => {
               audioCloseRef.current?.play()
               SpeechRecognition.abortListening()
             }}
-            bodyClassName='rounded-xl relative z-50 bg-[#212121] shadow-lg w-full mx-4'
+            bodyClassName='rounded-xl relative z-50 bg-[#212121] shadow-lg w-full mx-4 sm:hidden'
           >
-            <div className='h-70 flex flex-col px-3 justify-between py-3 relative w-full '>
+            <div className='h-70 flex flex-col px-3 justify-between py-3 relative w-full sm:hidden'>
               <span
                 className='w-8 h-8  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer absolute top-2 right-2'
                 onClick={() => {
@@ -473,6 +474,219 @@ const SearchBar = (props: propType) => {
           />
         </div>
       )}
+
+      {/* //* Responsive tablet, laptop */}
+      <div className='flex items-center justify-between h-15 bg-[#0f0f0f] sticky z-50 max-w-full px-4 py-2 gap-x-2 text-center max-sm:hidden'>
+        <div className=' h-10 flex items-center w-[380px]' ref={childRef}>
+          <div className='relative w-full '>
+            <input
+              type='text'
+              className={` rounded-l-2xl h-10 bg-[#121212] placeholder:font-semibold placeholder:text-[#888888] placeholder:text-sm shadow-lg  text-white border-[#303030] border-1  w-full py-2 ${
+                search ? '' : 'pl-10'
+              }`}
+              placeholder={search ? '' : 'Tìm kiếm'}
+              onChange={(e) => setSearch(e.target.value)}
+              value={search}
+              onClick={() => setIsDropdown(true)}
+            />
+
+            <>
+              {' '}
+              <button
+                className={`absolute top-0 right-2 w-[20px] h-full  transition-all ${
+                  search ? 'opacity-100 overflow-visible' : 'opacity-0 overflow-hidden'
+                }`}
+                onClick={() => setSearch('')}
+              >
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth='1.5'
+                  stroke='white'
+                  className='w-5 h-5 bg-[#121212] rounded-full hover:bg-[#a8a3a3]'
+                >
+                  <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
+                </svg>
+              </button>
+              {isDropdown && (
+                <>
+                  <Dropdown className='left-0 w-full h-[360px] bg-white text-black font-medium text-lg'>
+                    {keyword.map((item, index) => (
+                      <Link to='/' key={item.id} className='flex flex-col px-2 py-2 my-2 hover:bg-gray-100'>
+                        <div className='flex items-center justify-between'>
+                          <div className='flex items-end gap-x-3'>
+                            <RiHistoryLine className='w-5 h-5' />
+                            <span className='text-xs font-medium'>{item.name}</span>
+                          </div>
+                          <span className='text-blue-700 text-xs hover:underline'>Xoá</span>
+                        </div>
+                      </Link>
+                    ))}
+                  </Dropdown>
+
+                  <div className='absolute top-0 left-0 pl-3 h-full flex items-center z-50 '>
+                    {' '}
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='bold'
+                      viewBox='0 0 24 24'
+                      strokeWidth='1.5'
+                      stroke='white'
+                      className='h-4  w-4'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        d='M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z'
+                      />
+                    </svg>
+                  </div>
+                </>
+              )}
+            </>
+          </div>
+
+          <div
+            className=' border border-[#303030] bg-[#222222] w-[40px] h-full rounded-r-2xl cursor-pointer flex items-center justify-center  '
+            onClick={() => setIsDropdown(false)}
+          >
+            <Tooltip content='Tìm kiếm'>
+              <button className='mt-1'>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth='1.5'
+                  stroke='white'
+                  className=' h-5 text-center w-full'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z'
+                  />
+                </svg>
+              </button>
+            </Tooltip>
+          </div>
+        </div>
+
+        <Tooltip content='Tìm kiếm bằng giọng nói' animation='duration-1000' className='text-sm'>
+          <div
+            className='w-8 h-8  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer sm:w-10 sm:h-10'
+            onClick={handleVoice}
+          >
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth='1.5'
+              stroke='white'
+              className='w-5 h-5 sm:w-6 sm:h-6'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z'
+              />
+            </svg>
+          </div>
+        </Tooltip>
+
+        {/* //*Modal */}
+        <ModalAdvanced
+          visible={isModal}
+          onClose={() => {
+            setIsModal(false)
+            audioCloseRef.current?.play()
+            SpeechRecognition.abortListening()
+          }}
+          bodyClassName='rounded-xl relative z-50 bg-[#212121] shadow-lg w-full mx-7 max-sm:hidden'
+        >
+          <div className='h-72 flex flex-col px-6 justify-between py-6 relative w-full max-sm:hidden'>
+            <span
+              className='w-12 h-12  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer absolute top-4 right-4'
+              onClick={() => {
+                audioCloseRef.current?.play()
+                SpeechRecognition.abortListening()
+                setIsModal(false)
+              }}
+            >
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                strokeWidth='1.5'
+                stroke='white'
+                className='w-8 h-8 '
+              >
+                <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
+              </svg>
+            </span>
+
+            {transcript === '' ? (
+              listening === true ? (
+                <>
+                  <span className='text-3xl text-white font-semibold'>Đang nghe ...</span>
+                  <div className='w-16 h-16 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700 my-9'>
+                    <BsFillMicFill className='w-9 h-9 text-white' />
+                  </div>
+                </>
+              ) : isProcess ? (
+                <>
+                  <span className='text-3xl text-white font-semibold'>Đang nghe ...</span>
+                  <div className='w-16 h-16 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700 my-9'>
+                    <BsFillMicFill className='w-9 h-9 text-white' />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <span className='text-3xl text-white font-semibold mb-8'>Tôi chưa nghe rõ. Mời bạn nói lại</span>
+                  <div>
+                    <div
+                      className='w-20 h-20 rounded-full flex items-center justify-center mx-auto bg-[#717171] cursor-pointer'
+                      onClick={() => {
+                        audioStartRef.current?.play()
+                        SpeechRecognition.startListening({ language: 'vi-VN' })
+                        setIsProcess(true)
+                      }}
+                    >
+                      <BsFillMicFill className='w-9 h-9 text-white' />
+                    </div>
+                    <div className='text-xl font-semibold text-[#638caa] py-2 text-center'>
+                      Nhấn vào micrô để thử lại
+                    </div>
+                  </div>
+                </>
+              )
+            ) : (
+              <>
+                {' '}
+                <span className='text-base text-white font-semibold'>{transcript}</span>
+                <div className='w-8 h-8 rounded-full  flex items-center justify-center mx-auto animate-ping bg-red-700 my-5'>
+                  <BsFillMicFill className='w-5 h-5 text-white' />
+                </div>
+              </>
+            )}
+          </div>
+        </ModalAdvanced>
+        <audio
+          src='https://res.cloudinary.com/dbekkzxtt/video/upload/v1677591082/error-2-126514_rmyns3.mp3?fbclid=IwAR285bwo7xl9O4swZqKSv4muZDT9ddRc33_EZ27TnonknzlEcCzYLoaiaPc'
+          ref={audioStartRef}
+          className='opacity-0 hidden'
+        />
+        <audio
+          src='https://res.cloudinary.com/dbekkzxtt/video/upload/v1677591082/error-2-126514_rmyns3.mp3?fbclid=IwAR285bwo7xl9O4swZqKSv4muZDT9ddRc33_EZ27TnonknzlEcCzYLoaiaPc'
+          ref={audioEndRef}
+          className='opacity-0 hidden '
+        />
+        <audio
+          src='https://res.cloudinary.com/dbekkzxtt/video/upload/v1677591082/error-2-126514_rmyns3.mp3?fbclid=IwAR285bwo7xl9O4swZqKSv4muZDT9ddRc33_EZ27TnonknzlEcCzYLoaiaPc'
+          ref={audioCloseRef}
+          className='opacity-0 hidden'
+        />
+      </div>
     </>
   )
 }

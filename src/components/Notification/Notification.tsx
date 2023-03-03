@@ -16,20 +16,20 @@ const Notification = () => {
   return (
     <Tooltip content='Thông báo' animation='duration-1000'>
       <div
-        className='w-8 h-8  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer relative '
+        className='w-8 h-8  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer relative sm:w-10 sm:h-10'
         onClick={() => setIsShow(!isShow)}
         ref={childRef}
       >
         {isShow ? (
-          <AiFillBell className='w-5 h-5 text-white pointer-events-none ' />
+          <AiFillBell className='w-5 h-5 text-white pointer-events-none sm:w-6 sm:h-6' />
         ) : (
-          <AiOutlineBell className='w-5 h-5 text-white pointer-events-none ' />
+          <AiOutlineBell className='w-5 h-5 text-white pointer-events-none sm:h-6 sm:w-6' />
         )}
 
         {isShow && (
           <>
             {' '}
-            <Dropdown className='w-[230px] h-[320px] bg-[#282828] right-0'>
+            <Dropdown className='w-[230px] h-[320px] bg-[#282828] right-0 sm:w-[300px] sm:h-[350px]'>
               <div className=' flex flex-col justify-between h-full'>
                 <div className='flex flex-col'>
                   <span className='text-white text-sm font-medium px-3 py-3'>Thông báo</span>

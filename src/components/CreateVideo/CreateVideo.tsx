@@ -33,14 +33,14 @@ const CreateVideo = () => {
     <>
       <Tooltip content='Tạo' animation='duration-1000'>
         <div
-          className={`w-8 h-8  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer relative `}
+          className={`w-8 h-8  rounded-full flex items-center justify-center hover:bg-[rgba(225,225,225,0.15)] cursor-pointer relative sm:w-10 sm:h-10 `}
           onClick={() => setIsShow(!isShow)}
           ref={childRef}
         >
           {isShow ? (
-            <RiVideoAddFill className='w-5 h-5 text-white pointer-events-none ' />
+            <RiVideoAddFill className='w-5 h-5 text-white pointer-events-none sm:w-6 sm:h-6' />
           ) : (
-            <RiVideoAddLine className='w-5 h-5 text-white pointer-events-none ' />
+            <RiVideoAddLine className='w-5 h-5 text-white pointer-events-none sm:w-6 sm:h-6' />
           )}
           {isShow && (
             <Dropdown className='w-[130px] h-[90px] bg-[#282828] text-white right-0 py-2'>
